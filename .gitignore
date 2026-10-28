@@ -1,0 +1,15 @@
+# Зависимости
+node_modules/
+
+# Результаты прогонов Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Allure
+allure-results/
+allure-report/
+
+# Системные файлы macOS
+.DS_Store
