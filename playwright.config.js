@@ -2,8 +2,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import 'dotenv/config';
 
-const SHOW_BROWSER = true;   // браузер виден
-//const SHOW_BROWSER = false;  // браузера не видно (коммитить так)
+// const SHOW_BROWSER = true;   // браузер виден
+const SHOW_BROWSER = false;  // браузера не видно (коммитить так)
 
 export default defineConfig({
   testDir: './tests',
