@@ -32,7 +32,7 @@ jobs:
       - name: Clean old results
         run: rm -rf allure-results
       - name: Run Playwright tests
-        run: allurectl watch -- npx playwright test --reporter=allure-playwright
+        run: allurectl watch -- npx playwright test tests/staging --reporter=allure-playwright
       - name: Upload results to Allure TestOps
         if: always()
         run: allurectl upload allure-results
