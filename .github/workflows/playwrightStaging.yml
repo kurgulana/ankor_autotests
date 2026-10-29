@@ -1,0 +1,40 @@
+name: Staging testing
+on:
+  workflow_dispatch:
+    inputs:
+      ALLURE_JOB_RUN_ID:
+        description: ALLURE_JOB_RUN_ID service parameter. Leave blank.
+      ALLURE_USERNAME:
+        description: ALLURE_USERNAME service parameter. Leave blank.
+
+env:
+  ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+  ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
+  ALLURE_ENDPOINT: https://rallyup.testops.cloud
+  ALLURE_PROJECT_ID: 366
+  ALLURE_RESULTS: allure-results
+
+jobs:
+  test:
+    timeout-minutes: 240
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+      - name: Install allurectl
+        uses: allure-framework/setup-allurectl@v1
+      - name: Clean old results
+        run: rm -rf allure-results
+      - name: Run Playwright tests
+        run: allurectl watch -- npx playwright test --reporter=allure-playwright
+      - name: Upload results to Allure TestOps
+        if: always()
+        run: allurectl upload allure-results
+        env:
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
